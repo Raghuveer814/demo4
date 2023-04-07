@@ -1,0 +1,20 @@
+steps:
+- name: 'hashicorp/terraform:1.0.4'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    terraform init
+    terraform validate
+    terraform plan -out=tfplan -input=false
+- name: 'hashicorp/terraform:1.0.4'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - 'terraform apply -auto-approve tfplan'
+  env:
+  - 'TF_VAR_project_id=${atomic-matrix-376010}'
+  - 'TF_VAR_zone=us-central1-a'
+  - 'TF_VAR_machine_type=n1-standard-1'
+  - 'TF_VAR_image_project=debian-cloud'
+  - 'TF_VAR_image_family=debian-10'
